@@ -5,11 +5,12 @@ import com.espertech.esper.runtime.client.EPRuntime;
 import com.espertech.esper.runtime.client.EPStatement;
 import com.espertech.esper.runtime.client.UpdateListener;
 
-public class PersonListener implements UpdateListener {
+public class HeartRateListener implements UpdateListener {
 
     @Override
     public void update(EventBean[] newEvents, EventBean[] oldEvents, EPStatement statement, EPRuntime runtime){
-        int age = (int) newEvents[0].get("age");
-        System.out.printf("age: %d%n", age);
+        long id = (long) newEvents[0].get("ID");
+        int heartrate = (int) newEvents[0].get("value");
+        System.out.printf("ID: %d; Heart Rate is over: %d%n", id, heartrate);
     }
 }
