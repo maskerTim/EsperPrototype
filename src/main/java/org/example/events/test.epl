@@ -1,0 +1,23 @@
+// Declare the name for the module (optional).
+module event.PersonEvent;
+
+// Declare other module(s) that this module depends on (optional).
+// This can be used to resolve name conflicts.
+// uses org.myorganization.common;
+
+// Import any Java/.NET classes of the given package name (optional).
+// Imports only handle classpath and do not import other modules.
+import org.example.events.PersonEvent;
+
+// Declare an event type based on a Java class in the package that was imported as above
+@public @buseventtype @JsonSchema(className='PersonEvent') create json schema JSONPersonEvent();
+
+// Sample statement
+@Name('my-statement')
+@Description('Testing')
+select age from JSONPersonEvent;
+
+// Sample statement
+@Name('my-test')
+@Description('Testing')
+select name from JSONPersonEvent;
