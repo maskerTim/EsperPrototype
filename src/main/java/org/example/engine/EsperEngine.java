@@ -12,6 +12,7 @@ import com.espertech.esper.runtime.client.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,13 @@ public class EsperEngine {
             ParseException {
         CompilerArguments compilerArguments = new CompilerArguments(configuration);
         Module module = epCompiler.readModule(filepath);
+        epCompiled = epCompiler.compile(module, compilerArguments);
+    }
+
+    public void compile (URL url, Configuration configuration) throws IOException, ParseException,
+            EPCompileException{
+        CompilerArguments compilerArguments = new CompilerArguments(configuration);
+        Module module = epCompiler.readModule(url);
         epCompiled = epCompiler.compile(module, compilerArguments);
     }
 
