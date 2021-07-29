@@ -9,18 +9,30 @@ module event.HeartAndBloodAbnormalModule;
 // Imports only handle classpath and do not import other modules.
 import org.example.events.HeartAbnormalEvent;
 import org.example.events.BloodAbnormalEvent;
+import org.example.events.PulseAbnormalEvent;
 
 // Declare an event type based on a Java class in the package that was imported as above
 @public @buseventtype @JsonSchema(className='HeartAbnormalEvent') create json schema JSONHeartAbnormalEvent();
 @public @buseventtype @JsonSchema(className='BloodAbnormalEvent') create json schema JSONBloodAbnormalEvent();
+@public @buseventtype @JsonSchema(className='PulseAbnormalEvent') create json schema JSONPulseAbnormalEvent();
 
 // Sample statement
 @Name('HeartRate')
-@Description('Heart Rate Date')
-select ID, value from JSONHeartAbnormalEvent where value > 80;
+@Description('Heart Rate Data')
+select ID, value from JSONHeartAbnormalEvent#time(10)#length(10) where value > 80;
 
 // Sample statement
-@Name('HigherAbnormal')
-@Description('Too Higher Heart or Blood Pressure')
-select heart.ID, heart.value as heartV, blood.value as bloodV from JSONHeartAbnormalEvent#time(5)#length(5) as heart, JSONBloodAbnormalEvent#time(5)#length(5) as blood
-where heart.value >80 and blood.value > 120;
+@Name('BloodPressure')
+@Description('Blood Pressure Data')
+select ID, value from JSONBloodAbnormalEvent#time(15)#length(15) where value > 120;
+
+// Sample statement
+@Name('PulseOximeter')
+@Description('Pulse Oximeter Data')
+select ID, value from JSONPulseAbnormalEvent#time(10)#length(10) where value < 95;
+
+// Sample statement
+// @Name('HigherAbnormal')
+// @Description('Too Higher Heart or Blood Pressure')
+// select heart.ID, heart.value as heartV, blood.value as bloodV from JSONHeartAbnormalEvent#time(5)#length(5) as heart, JSONBloodAbnormalEvent#time(5)#length(5) as blood
+// where heart.value >80 and blood.value > 120;
