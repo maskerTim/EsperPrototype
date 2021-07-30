@@ -24,12 +24,12 @@ select ID, value, endTime, startTime from JSONHeartAbnormalEvent#time(10)#length
 // Sample statement
 @Name('BloodPressure')
 @Description('Blood Pressure Data')
-select ID, value, endTime from JSONBloodAbnormalEvent#time(15)#length(15) where value > 120;
+select ID, value, endTime, startTime from JSONBloodAbnormalEvent#time(15)#length(15) where value > 120;
 
 // Sample statement
 @Name('PulseOximeter')
 @Description('Pulse Oximeter Data')
-select ID, value from JSONPulseAbnormalEvent#time(10)#length(10) where value < 95;
+select ID, value, endTime, startTime from JSONPulseAbnormalEvent#time(10)#length(10) where value < 95;
 
 // Sample statement
 // @Name('HigherAbnormal')
