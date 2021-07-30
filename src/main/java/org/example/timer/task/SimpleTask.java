@@ -21,14 +21,14 @@ public class SimpleTask  extends TimerTask {
 //                System.out.println("send Heart Beat!!");
 //                esperEngine.sendEventJson(subscriber.popQueue().toString(), "JSONHeartAbnormalEvent");
 //            }
-            if(subscriber.getQueueFirstElement().get("dataType").equals("Blood Pressure")) {
-                System.out.println("send Blood Pressure!!");
-                esperEngine.sendEventJson(subscriber.popQueue().toString(), "JSONBloodAbnormalEvent");
-            }
-//            if(subscriber.getQueueFirstElement().get("dataType").equals("Pulse Oximeter")) {
-//                System.out.println("send Pulse Oximeter!!");
-//                esperEngine.sendEventJson(subscriber.popQueue().toString(), "JSONPulseAbnormalEvent");
+//            if(subscriber.getQueueFirstElement().get("dataType").equals("Blood Pressure")) {
+//                System.out.println("send Blood Pressure!!");
+//                esperEngine.sendEventJson(subscriber.popQueue().toString(), "JSONBloodAbnormalEvent");
 //            }
+            if(subscriber.getQueueFirstElement().get("dataType").equals("Pulse Oximeter")) {
+                System.out.println("send Pulse Oximeter!!");
+                esperEngine.sendEventJson(subscriber.popQueue().toString(), "JSONPulseAbnormalEvent");
+            }
             System.out.println("send out to Esper!!");
         }
     }
