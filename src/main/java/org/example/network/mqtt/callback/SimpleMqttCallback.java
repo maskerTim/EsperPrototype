@@ -25,7 +25,7 @@ public class SimpleMqttCallback implements MqttCallback {
         SimpleDateFormat ft = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSSS");
         JSONObject jsonObject = new JSONObject(new String(mqttMessage.getPayload()));
         jsonObject.put("endTime", ft.format(now));
-        //System.out.println("Message received:\n\t"+ jsonObject.toString());
+        System.out.println("Message received:\n\t"+ jsonObject.toString());
         subscriber.addQueue(jsonObject);
         //System.out.println("Message received:\n\t"+ new String(mqttMessage.getPayload()) );
     }

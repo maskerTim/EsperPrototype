@@ -4,8 +4,8 @@ import java.util.Date;
 
 public class PulseAbnormalEvent {
     public long ID;
-    public Date startTime;
-    public Date endTime;
+    public String startTime;
+    public String endTime;
     public String dataType;
     public String valueType;
     public String unit;

@@ -12,8 +12,9 @@ public class PulseOximeterListener implements UpdateListener {
     @Override
     public void update(EventBean[] newEvents, EventBean[] oldEvents, EPStatement statement, EPRuntime runtime){
         long id = (long) newEvents[0].get("ID");
-        Date endTime = (Date) newEvents[0].get("endTime");
+        String startTime = (String) newEvents[0].get("startTime");
+        String endTime = (String) newEvents[0].get("endTime");
         int pulseoximeter = (int) newEvents[0].get("value");
-        System.out.printf("Time: %tc; ID: %d; Pulse Oximeter is over: %d%n", endTime, id, pulseoximeter);
+        System.out.printf("start time: %s; end time: %s; ID: %d; Pulse Oximeter is over: %d%n", startTime, endTime, id, pulseoximeter);
     }
 }
