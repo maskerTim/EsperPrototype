@@ -19,12 +19,12 @@ import org.example.events.PulseAbnormalEvent;
 // Sample statement
 @Name('HeartRate')
 @Description('Heart Rate Data')
-select ID, value from JSONHeartAbnormalEvent#time(10)#length(10) where value > 80;
+select ID, value, endTime from JSONHeartAbnormalEvent#time(10)#length(10) where value > 80;
 
 // Sample statement
 @Name('BloodPressure')
 @Description('Blood Pressure Data')
-select ID, value from JSONBloodAbnormalEvent#time(15)#length(15) where value > 120;
+select ID, value, endTime from JSONBloodAbnormalEvent#time(15)#length(15) where value > 120;
 
 // Sample statement
 @Name('PulseOximeter')
