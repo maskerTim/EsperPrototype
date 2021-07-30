@@ -76,14 +76,14 @@ public class App
 
 //        List<UpdateListener> heartrate = new ArrayList<>();
 //        heartrate.add(new HeartRateListener());
-//        List<UpdateListener> bloodpressure = new ArrayList<>();
-//        bloodpressure.add(new BloodPressureListener());
-        List<UpdateListener> pulseoximeter = new ArrayList<>();
-        pulseoximeter.add(new PulseOximeterListener());
+        List<UpdateListener> bloodpressure = new ArrayList<>();
+        bloodpressure.add(new BloodPressureListener());
+//        List<UpdateListener> pulseoximeter = new ArrayList<>();
+//        pulseoximeter.add(new PulseOximeterListener());
 
 //        esperEngine.setStatement("HeartRate", heartrate);
-//        esperEngine.setStatement("BloodPressure", bloodpressure);
-        esperEngine.setStatement("PulseOximeter", pulseoximeter);
+        esperEngine.setStatement("BloodPressure", bloodpressure);
+//        esperEngine.setStatement("PulseOximeter", pulseoximeter);
 
         esperEngine.setListener();
 
