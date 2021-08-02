@@ -12,6 +12,7 @@ import org.example.listener.HeartAndBloodAbnormalListener;
 import org.example.listener.HeartRateListener;
 import org.example.listener.PulseOximeterListener;
 import org.example.network.mqtt.callback.SimpleMqttCallback;
+import org.example.network.mqtt.client.Publisher;
 import org.example.network.mqtt.client.Subscriber;
 import org.example.timer.task.SimpleTask;
 
@@ -38,29 +39,38 @@ public class App
         PropertyValues propertyValues = new PropertyValues();
         Properties properties = propertyValues.loadProperties();
 
-        /* MQTT Subscriber setting */
+        /* MQTT Subscriber runs */
         Subscriber subscriber = null;
         try {
-            subscriber = new Subscriber(String.format("tcp://%s:%s", properties.get("MQTT_BROKER_IP"),
-                    properties.get("MQTT_BROKER_PORT")));
+            subscriber = new Subscriber(String.format("tcp://%s:%s", properties.get("MQTT_BROKER_IP_SUB"),
+                    properties.get("MQTT_BROKER_PORT_SUB")));
             subscriber.setCallback(new SimpleMqttCallback(subscriber));
             subscriber.connect();
-            subscriber.subscribe(String.format("%s", properties.get("MQTT_TOPIC")));
+            subscriber.subscribe(String.format("%s", properties.get("MQTT_TOPIC_SUB")));
 
         }catch (MqttException ex){
             ex.printStackTrace();
         }
 
-        /* Esper Implementation */
+        /* MQTT Publisher runs */
+        Publisher publisher = null;
+        try{
+            publisher = new Publisher(String.format("tcp://%s:%s", properties.get("MQTT_BROKER_IP_PUB"),
+                    properties.get("MQTT_BROKER_PORT_PUB")));
+            publisher.connect();
+            System.out.println("publisher connection is successful.");
+        }catch (MqttException ex){
+            ex.printStackTrace();
+        }
+
+        /* Esper Implements */
         EsperEngine esperEngine = EsperEngine.getInstance();
         Configuration configuration = new Configuration();
 
         URL resource = App.class.getClassLoader().getResource("HeartAndBloodAbnormalModule.epl");
-        //File f = new File(String.valueOf(resource));
 
         esperEngine.createCompiler();
         try {
-            //esperEngine.compile(f, configuration);
             esperEngine.compile(resource, configuration);
         }catch (EPCompileException | ParseException | IOException ex){
             // handle exception here
@@ -75,7 +85,7 @@ public class App
         }
 
         List<UpdateListener> heartrate = new ArrayList<>();
-        heartrate.add(new HeartRateListener());
+        heartrate.add(new HeartRateListener(publisher, String.format("%s", properties.get("MQTT_TOPIC_PUB"))));
 //        List<UpdateListener> bloodpressure = new ArrayList<>();
 //        bloodpressure.add(new BloodPressureListener());
 //        List<UpdateListener> pulseoximeter = new ArrayList<>();

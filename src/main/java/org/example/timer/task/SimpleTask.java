@@ -18,6 +18,7 @@ public class SimpleTask  extends TimerTask {
     public void run(){
         if(!subscriber.isEmptyQueue()) {
             if(subscriber.getQueueFirstElement().get("dataType").equals("Heart Rate")) {
+                //System.out.println(Thread.currentThread().getName());
                 System.out.println("send Heart Beat!!");
                 esperEngine.sendEventJson(subscriber.popQueue().toString(), "JSONHeartAbnormalEvent");
             }
