@@ -11,7 +11,7 @@ public class PropertyValues {
     public Properties loadProperties(){
         String propFile = "config.properties";
         Properties properties = new Properties();
-        System.out.println(PropertyValues.class.getClassLoader().getResourceAsStream(propFile));
+        System.out.println("properties file:"+PropertyValues.class.getClassLoader().getResourceAsStream(propFile));
         try(InputStream input = PropertyValues.class.getClassLoader().getResourceAsStream(propFile)){
             if(input != null){
                 properties.load(input);

@@ -23,9 +23,10 @@ public class HeartRateListener implements UpdateListener {
         String endTime = (String) newEvents[0].get("endTime");
         int heartrate = (int) newEvents[0].get("value");
         System.out.printf("start time: %s, end time: %s; ID: %d; Heart Rate is over: %d%n", startTime, endTime, id, heartrate);
-        String signal = String.format("\"ID\":\"%s\",\"value\":\"%s\"", id, heartrate);
+        String signal = String.format("{\"ID\":\"%s\",\"value\":\"%s\"}", id, heartrate);
         try {
             publisher.publish(topic, signal);
+            System.out.println("publish is successful.");
         }catch (MqttException ex){
             ex.printStackTrace();
         }

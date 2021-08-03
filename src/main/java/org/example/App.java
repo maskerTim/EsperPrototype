@@ -16,12 +16,8 @@ import org.example.network.mqtt.client.Publisher;
 import org.example.network.mqtt.client.Subscriber;
 import org.example.timer.task.SimpleTask;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
