@@ -11,11 +11,11 @@ import java.util.List;
 
 public class HeartRateListener implements UpdateListener {
     private Publisher publisher = null;
-    private List<String> topic = null;
+    private List<String> topics = null;
 
     public HeartRateListener(Publisher publisher, List<String> topic){
         this.publisher = publisher;
-        this.topic = topic;
+        this.topics = topic;
     }
 
     @Override
@@ -27,7 +27,9 @@ public class HeartRateListener implements UpdateListener {
         System.out.printf("start time: %s, end time: %s; ID: %d; Heart Rate is over: %d%n", startTime, endTime, id, heartrate);
         String signal = String.format("{\"ID\":\"%s\",\"value\":\"%s\"}", id, heartrate);
         try {
-            publisher.publish(topic, signal);
+            for(String topic : topics){
+                publisher.publish(topic, signal);
+            }
             System.out.println("publish is successful.");
         }catch (MqttException ex){
             ex.printStackTrace();

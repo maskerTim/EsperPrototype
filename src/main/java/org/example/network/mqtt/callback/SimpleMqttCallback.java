@@ -21,7 +21,7 @@ public class SimpleMqttCallback implements MqttCallback {
         System.out.println("Connection to MQTT broker lost!");
     }
 
-    public void messageArrived(String s, MqttMessage mqttMessage) {
+    public void messageArrived(String topic, MqttMessage mqttMessage) {
         Date now = new Date();
         SimpleDateFormat ft = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss.SSSS");
         JSONObject jsonObject = new JSONObject(new String(mqttMessage.getPayload()));

@@ -22,7 +22,7 @@ public class CEPOperator {
     private String name = null; // name of operator
     private List<String> subNetwork = null;
     private List<String> pubNetwork = null;
-    private List<String> subTopics = new ArrayList<>();
+    private String[] subTopics = null;
     private List<String> pubTopics  = new ArrayList<>();
     private Subscriber subscriber = null;
     private Publisher publisher = null;
@@ -43,7 +43,7 @@ public class CEPOperator {
     }
 
     public void setSubTopics(String[] subTopics) {
-        this.subTopics.addAll(Arrays.asList(subTopics));
+        this.subTopics = subTopics;
     }
 
     public void setPubTopics(String[] pubTopics){
@@ -131,7 +131,7 @@ public class CEPOperator {
     }
 
     public void setup() throws NoTopicsException {
-        if(subTopics.isEmpty() || pubTopics.isEmpty()){
+        if(subTopics.length == 0 || pubTopics.isEmpty()){
             throw new NoTopicsException();
         }else {
             try {

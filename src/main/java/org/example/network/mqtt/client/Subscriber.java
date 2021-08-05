@@ -32,10 +32,8 @@ public class Subscriber {
     }
 
     /* Subscribe multiple topics */
-    public void subscribe(List<String> topics) throws MqttException{
-        for(String topic : topics){
-            mqttClient.subscribe(topic);
-        }
+    public void subscribe(String[] topics) throws MqttException{
+        mqttClient.subscribe(topics);
     }
 
     public void addQueue(JSONObject json){
