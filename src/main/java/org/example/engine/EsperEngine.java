@@ -9,6 +9,7 @@ import com.espertech.esper.compiler.client.EPCompileException;
 import com.espertech.esper.compiler.client.EPCompiler;
 import com.espertech.esper.compiler.client.EPCompilerProvider;
 import com.espertech.esper.runtime.client.*;
+import org.example.engine.exceptions.NoListenersException;
 
 import java.io.File;
 import java.io.IOException;
@@ -69,14 +70,18 @@ public class EsperEngine {
         statementListener.put(statement, updateListeners);
     }
 
-    public void setListener(){
-        for(Map.Entry entry: statementListener.entrySet()){
-            EPStatement state = epRuntime.getDeploymentService().getStatement(epDeployment.getDeploymentId(),
-                    entry.getKey().toString());
-            List<UpdateListener> updateListeners = (List<UpdateListener>) entry.getValue();
-            for(UpdateListener updateListener: updateListeners) {
-                state.addListener(updateListener);
+    public void setListener() throws NoListenersException{
+        if(!statementListener.isEmpty()) {
+            for (Map.Entry entry : statementListener.entrySet()) {
+                EPStatement state = epRuntime.getDeploymentService().getStatement(epDeployment.getDeploymentId(),
+                        entry.getKey().toString());
+                List<UpdateListener> updateListeners = (List<UpdateListener>) entry.getValue();
+                for (UpdateListener updateListener : updateListeners) {
+                    state.addListener(updateListener);
+                }
             }
+        }else {
+            throw new NoListenersException();
         }
     }
 

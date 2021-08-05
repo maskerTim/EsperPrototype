@@ -17,6 +17,7 @@ public class SimpleMqttCallback implements MqttCallback {
     }
 
     public void connectionLost(Throwable throwable) {
+        throwable.printStackTrace();
         System.out.println("Connection to MQTT broker lost!");
     }
 

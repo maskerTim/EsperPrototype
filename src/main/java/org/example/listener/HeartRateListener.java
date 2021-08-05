@@ -7,11 +7,13 @@ import com.espertech.esper.runtime.client.UpdateListener;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.example.network.mqtt.client.Publisher;
 
+import java.util.List;
+
 public class HeartRateListener implements UpdateListener {
     private Publisher publisher = null;
-    private String topic = null;
+    private List<String> topic = null;
 
-    public HeartRateListener(Publisher publisher, String topic){
+    public HeartRateListener(Publisher publisher, List<String> topic){
         this.publisher = publisher;
         this.topic = topic;
     }
