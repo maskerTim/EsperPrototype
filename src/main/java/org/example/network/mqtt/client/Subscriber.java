@@ -20,13 +20,22 @@ public class Subscriber {
         mqttClient.setCallback(mqttCallback);
     }
 
+    /* connect by MQTT */
     public void connect() throws MqttException {
         mqttClient.connect();
         System.out.println("connection successful");
     }
 
+    /* Subscribe single topic */
     public void subscribe(String topic) throws MqttException{
         mqttClient.subscribe(topic);
+    }
+
+    /* Subscribe multiple topics */
+    public void subscribe(List<String> topics) throws MqttException{
+        for(String topic : topics){
+            mqttClient.subscribe(topic);
+        }
     }
 
     public void addQueue(JSONObject json){
