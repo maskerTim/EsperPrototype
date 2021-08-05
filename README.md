@@ -1,2 +1,4 @@
 # EsperPrototype
-This is Esper Project for generic prototype.
+###### tags: `github` `CEP` `Esper`
+## Introduction
+This is **Simple Esper Project** for **Complex Event Processing (CEP)**.
