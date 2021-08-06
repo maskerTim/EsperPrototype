@@ -23,7 +23,7 @@ public class Subscriber {
     /* connect by MQTT */
     public void connect() throws MqttException {
         mqttClient.connect();
-        System.out.println("connection successful");
+        System.out.println("subscriber connection successful");
     }
 
     /* Subscribe single topic */

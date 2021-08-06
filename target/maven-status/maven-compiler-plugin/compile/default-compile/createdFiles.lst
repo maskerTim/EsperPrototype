@@ -5,8 +5,10 @@ org/example/listener/HeartRateListener.class
 org/example/engine/EsperEngine.class
 org/example/listener/HeartAndBloodAbnormalListener.class
 org/example/network/mqtt/callback/SimpleMqttCallback.class
+org/example/timer/task/VideoTask.class
 org/example/network/mqtt/client/Publisher.class
 org/example/PropertyValues.class
+org/example/network/mqtt/callback/VideoMqttCallback.class
 org/example/operators/CEPOperator.class
 org/example/listener/PulseOximeterListener.class
 org/example/events/PulseAbnormalEvent.class
