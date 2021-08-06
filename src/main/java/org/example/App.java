@@ -99,13 +99,8 @@ public class App
         String[] pubTopics = {"Try/HeartActuator"};
         cepOp.setPubTopics(pubTopics);
         try {
-            URI uri = App.class.getClassLoader().getResource("haarcascade_car.xml").toURI();
-            Map<String, String> env = new HashMap<>();
-            env.put("create", "true");
-            FileSystems.newFileSystem(uri, env);
-            Path carCascadeFile = Paths.get(uri);
-            String filepath = carCascadeFile.toString();
-            System.out.println(filepath);
+            String filepath = "/home/maskertim/haarcascade_car.xml";
+            System.out.println("file path of car classifier model:"+filepath);
             cepOp.setCallback(new VideoMqttCallback(cepOp.getSubscriber(), filepath));
         }catch (Exception e){
             e.printStackTrace();
