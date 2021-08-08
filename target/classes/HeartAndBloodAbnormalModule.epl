@@ -10,11 +10,13 @@ module event.HeartAndBloodAbnormalModule;
 import org.example.events.HeartAbnormalEvent;
 import org.example.events.BloodAbnormalEvent;
 import org.example.events.PulseAbnormalEvent;
+import org.example.events.PeopleNumberEvent;
 
 // Declare an event type based on a Java class in the package that was imported as above
 @public @buseventtype @JsonSchema(className='HeartAbnormalEvent') create json schema JSONHeartAbnormalEvent();
 @public @buseventtype @JsonSchema(className='BloodAbnormalEvent') create json schema JSONBloodAbnormalEvent();
 @public @buseventtype @JsonSchema(className='PulseAbnormalEvent') create json schema JSONPulseAbnormalEvent();
+@public @buseventtype @JsonSchema(className='PeopleNumberEvent') create json schema JSONPeopleNumberEvent();
 
 // Sample statement
 @Name('HeartRate')
@@ -30,6 +32,11 @@ select ID, value, endTime, startTime from JSONBloodAbnormalEvent#time(15)#length
 @Name('PulseOximeter')
 @Description('Pulse Oximeter Data')
 select ID, value, endTime, startTime from JSONPulseAbnormalEvent#time(10)#length(10) where value < 95;
+
+// Sanple statement
+@Name('PeopleNumber')
+@Description('Detect the number of people in video')
+select number from JSONPeopleNumberEvent where number > 0;
 
 // Sample statement
 // @Name('HigherAbnormal')

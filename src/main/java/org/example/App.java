@@ -4,6 +4,7 @@ import com.espertech.esper.runtime.client.UpdateListener;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.example.engine.EsperEngine;
 import org.example.listener.HeartRateListener;
+import org.example.listener.PeopleNumberListener;
 import org.example.network.mqtt.callback.SimpleMqttCallback;
 import org.example.network.mqtt.callback.VideoMqttCallback;
 import org.example.operators.CEPOperator;
@@ -78,9 +79,9 @@ public class App
         System.load("/opt/opencv-4.5.3/build/lib/libopencv_java453.so");
         List<String> subNetwork = new ArrayList<>();
         List<String> pubNetwork = new ArrayList<>();
-        subNetwork.add("192.168.100.75");
+        subNetwork.add("192.168.0.99");
         subNetwork.add("1883");
-        pubNetwork.add("192.168.100.75");
+        pubNetwork.add("192.168.0.99");
         pubNetwork.add("1881");
         URL resource = App.class.getClassLoader().getResource("HeartAndBloodAbnormalModule.epl");
 
@@ -96,7 +97,7 @@ public class App
         // Set the configuration of subscriber and publisher
         String[] subTopics = {"Try/Video"};
         cepOp.setSubTopics(subTopics);
-        String[] pubTopics = {"Try/HeartActuator"};
+        String[] pubTopics = {"Try/VideoActuator"};
         cepOp.setPubTopics(pubTopics);
         try {
             String filepath = "/home/maskertim/haarcascade_car.xml";
@@ -107,9 +108,9 @@ public class App
             System.out.println("file load is error.");
         }
         // Set Esper listener configuration
-        List<UpdateListener> heartrate = new ArrayList<>();
-        heartrate.add(new HeartRateListener(cepOp.getPublisher(), cepOp.getPubTopics()));
-        cepOp.setStatement("HeartRate", heartrate);
+        List<UpdateListener> peopleNumber = new ArrayList<>();
+        peopleNumber.add(new PeopleNumberListener(cepOp.getPublisher(), cepOp.getPubTopics()));
+        cepOp.setStatement("PeopleNumber", peopleNumber);
 
         // Initialize the CEP operator
         try {
@@ -120,7 +121,7 @@ public class App
         }
 
         // Run the CEP Operator
-        cepOp.startup(new VideoTask(cepOp.getSubscriber(), EsperEngine.getInstance()), 500, 1000);
+        cepOp.startup(new VideoTask(cepOp.getSubscriber(), EsperEngine.getInstance()), 500, 200);
 
         System.out.println( "Hello World!" );
 

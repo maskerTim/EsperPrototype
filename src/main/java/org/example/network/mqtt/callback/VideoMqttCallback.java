@@ -4,13 +4,17 @@ import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.example.network.mqtt.client.Subscriber;
+import org.json.JSONObject;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.core.MatOfRect;
+import org.opencv.core.Rect;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.objdetect.CascadeClassifier;
 
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 public class VideoMqttCallback implements MqttCallback {
     private Subscriber subscriber = null;
@@ -33,10 +37,14 @@ public class VideoMqttCallback implements MqttCallback {
     }
 
     /* detect the number of car in a frame */
-    private void detectCar(Mat frame, CascadeClassifier carCascade){
+    private int detectCar(Mat frame, CascadeClassifier carCascade){
         MatOfRect cars = new MatOfRect();
+        // detect the car
         carCascade.detectMultiScale(frame, cars);
-        System.out.println(cars.size());
+        // collect the number of car in a frame
+        List<Rect> listOfcars = cars.toList();
+        //System.out.println(listOfcars.size());
+        return listOfcars.size();
     }
 
     /* Called when connection is lost */
@@ -49,11 +57,10 @@ public class VideoMqttCallback implements MqttCallback {
     public void messageArrived(String topic, MqttMessage mqttMessage) {
         byte[] img = decoder.decode(mqttMessage.getPayload());
         Mat frame = Imgcodecs.imdecode(new MatOfByte(img), Imgcodecs.IMREAD_UNCHANGED);
-        detectCar(frame, carCascade);
-        //JSONObject jsonObject = new JSONObject(new String(mqttMessage.getPayload()));
-        //System.out.println("Message received:\n\t"+ jsonObject.toString());
-        //subscriber.addQueue(jsonObject);
-        //System.out.println("Message received:\n\t"+ new String(mqttMessage.getPayload()) );
+        int carsNumber = detectCar(frame, carCascade);
+        JSONObject jsonObject = new JSONObject(String.format("{\"number\":%d}", carsNumber));
+        System.out.println("Message received:" + jsonObject);
+        subscriber.addQueue(jsonObject);
     }
 
     public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {

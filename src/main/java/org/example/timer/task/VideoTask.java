@@ -18,6 +18,7 @@ public class VideoTask extends TimerTask {
     public void run(){
         if(!subscriber.isEmptyQueue()) {
             System.out.println("send out to Esper!!");
+            esperEngine.sendEventJson(subscriber.popQueue().toString(), "JSONPeopleNumberEvent");
         }
     }
 }
