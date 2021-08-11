@@ -1,13 +1,18 @@
 package org.example;
 
-import org.example.App;
-
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * Get the configuration file, config.properties, of environment variable
+ */
 public class PropertyValues {
+    /**
+     * Load the environment variable file
+     * @return key-value pairs of property variables
+     */
     public Properties loadProperties(){
         String propFile = "config.properties";
         Properties properties = new Properties();

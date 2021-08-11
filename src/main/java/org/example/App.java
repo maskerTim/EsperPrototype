@@ -35,57 +35,16 @@ public class App
         Properties properties = propertyValues.loadProperties();
 
         /*----- Sensor Version --------*/
-//        List<String> subNetwork = new ArrayList<>();
-//        List<String> pubNetwork = new ArrayList<>();
-//        subNetwork.add("192.168.100.75");
-//        subNetwork.add("1882");
-//        pubNetwork.add("192.168.100.75");
-//        pubNetwork.add("1881");
-//        URL resource = App.class.getClassLoader().getResource("HeartAndBloodAbnormalModule.epl");
-//
-//        /* CEP Operator Section */
-//        CEPOperator cepOp = new CEPOperator("Op1", subNetwork, pubNetwork, resource);
-//        // Create the subscriber and publisher
-//        try {
-//            cepOp.createSubscriber();
-//            cepOp.createPublisher();
-//        }catch (MqttException ex){
-//            System.out.println("Subscriber or Publisher is connection error.");
-//            ex.printStackTrace();
-//        }
-//        // Set the configuration of subscriber and publisher
-//        String[] subTopics = {"Try/HeartRate"};
-//        cepOp.setSubTopics(subTopics);
-//        String[] pubTopics = {"Try/HeartActuator"};
-//        cepOp.setPubTopics(pubTopics);
-//        cepOp.setCallback(new SimpleMqttCallback(cepOp.getSubscriber()));
-//        // Set Esper listener configuration
-//        List<UpdateListener> heartrate = new ArrayList<>();
-//        heartrate.add(new HeartRateListener(cepOp.getPublisher(), cepOp.getPubTopics()));
-//        cepOp.setStatement("HeartRate", heartrate);
-//
-//        // Initialize the CEP operator
-//        try {
-//            cepOp.setup();
-//        }catch (NoTopicsException e){
-//            System.out.println("No Subscriber's or Publisher's Topic");
-//            e.printStackTrace();
-//        }
-//
-//        // Run the CEP Operator
-//        cepOp.startup(new SimpleTask(cepOp.getSubscriber(), EsperEngine.getInstance()), 500, 1000);
-
-        /*------- Video Version -----*/
-        System.load("/opt/opencv-4.5.3/build/lib/libopencv_java453.so");
         List<String> subNetwork = new ArrayList<>();
         List<String> pubNetwork = new ArrayList<>();
-        subNetwork.add("192.168.0.99");
-        subNetwork.add("1883");
-        pubNetwork.add("192.168.0.99");
+        subNetwork.add("192.168.100.75");
+        subNetwork.add("1882");
+        pubNetwork.add("192.168.100.75");
         pubNetwork.add("1881");
         URL resource = App.class.getClassLoader().getResource("HeartAndBloodAbnormalModule.epl");
 
-        CEPOperator cepOp = new CEPOperator("Video1", subNetwork, pubNetwork, resource);
+        /* CEP Operator Section */
+        CEPOperator cepOp = new CEPOperator("Op1", subNetwork, pubNetwork, resource);
         // Create the subscriber and publisher
         try {
             cepOp.createSubscriber();
@@ -95,22 +54,15 @@ public class App
             ex.printStackTrace();
         }
         // Set the configuration of subscriber and publisher
-        String[] subTopics = {"Try/Video"};
+        String[] subTopics = {"Try/HeartRate"};
         cepOp.setSubTopics(subTopics);
-        String[] pubTopics = {"Try/VideoActuator"};
+        String[] pubTopics = {"Try/HeartActuator"};
         cepOp.setPubTopics(pubTopics);
-        try {
-            String filepath = "/home/maskertim/haarcascade_car.xml";
-            System.out.println("file path of car classifier model:"+filepath);
-            cepOp.setCallback(new VideoMqttCallback(cepOp.getSubscriber(), filepath));
-        }catch (Exception e){
-            e.printStackTrace();
-            System.out.println("file load is error.");
-        }
+        cepOp.setCallback(new SimpleMqttCallback(cepOp.getSubscriber()));
         // Set Esper listener configuration
-        List<UpdateListener> peopleNumber = new ArrayList<>();
-        peopleNumber.add(new PeopleNumberListener(cepOp.getPublisher(), cepOp.getPubTopics()));
-        cepOp.setStatement("PeopleNumber", peopleNumber);
+        List<UpdateListener> heartrate = new ArrayList<>();
+        heartrate.add(new HeartRateListener(cepOp.getPublisher(), cepOp.getPubTopics()));
+        cepOp.setStatement("HeartRate", heartrate);
 
         // Initialize the CEP operator
         try {
@@ -121,7 +73,55 @@ public class App
         }
 
         // Run the CEP Operator
-        cepOp.startup(new VideoTask(cepOp.getSubscriber(), EsperEngine.getInstance()), 500, 200);
+        cepOp.startup(new SimpleTask(cepOp.getSubscriber(), EsperEngine.getInstance()), 500, 1000);
+
+        /*------- Video Version -----*/
+//        System.load("/opt/opencv-4.5.3/build/lib/libopencv_java453.so");
+//        List<String> subNetwork = new ArrayList<>();
+//        List<String> pubNetwork = new ArrayList<>();
+//        subNetwork.add("192.168.0.99");
+//        subNetwork.add("1883");
+//        pubNetwork.add("192.168.0.99");
+//        pubNetwork.add("1881");
+//        URL resource = App.class.getClassLoader().getResource("HeartAndBloodAbnormalModule.epl");
+//
+//        CEPOperator cepOp = new CEPOperator("Video1", subNetwork, pubNetwork, resource);
+//        // Create the subscriber and publisher
+//        try {
+//            cepOp.createSubscriber();
+//            cepOp.createPublisher();
+//        }catch (MqttException ex){
+//            System.out.println("Subscriber or Publisher is connection error.");
+//            ex.printStackTrace();
+//        }
+//        // Set the configuration of subscriber and publisher
+//        String[] subTopics = {"Try/Video"};
+//        cepOp.setSubTopics(subTopics);
+//        String[] pubTopics = {"Try/VideoActuator"};
+//        cepOp.setPubTopics(pubTopics);
+//        try {
+//            String filepath = "/home/martai/haarcascade_car.xml";
+//            System.out.println("file path of car classifier model:"+filepath);
+//            cepOp.setCallback(new VideoMqttCallback(cepOp.getSubscriber(), filepath));
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            System.out.println("file load is error.");
+//        }
+//        // Set Esper listener configuration
+//        List<UpdateListener> peopleNumber = new ArrayList<>();
+//        peopleNumber.add(new PeopleNumberListener(cepOp.getPublisher(), cepOp.getPubTopics()));
+//        cepOp.setStatement("PeopleNumber", peopleNumber);
+//
+//        // Initialize the CEP operator
+//        try {
+//            cepOp.setup();
+//        }catch (NoTopicsException e){
+//            System.out.println("No Subscriber's or Publisher's Topic");
+//            e.printStackTrace();
+//        }
+//
+//        // Run the CEP Operator
+//        cepOp.startup(new VideoTask(cepOp.getSubscriber(), EsperEngine.getInstance()), 500, 200);
 
         System.out.println( "Hello World!" );
 

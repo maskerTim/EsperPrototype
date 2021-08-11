@@ -9,15 +9,30 @@ import org.example.network.mqtt.client.Publisher;
 
 import java.util.List;
 
+/**
+ * Update listener of heart rate
+ */
 public class HeartRateListener implements UpdateListener {
     private Publisher publisher = null;
     private List<String> topics = null;
 
+    /**
+     * Constructor
+     * @param publisher: The publisher instance
+     * @param topic: List of topics
+     */
     public HeartRateListener(Publisher publisher, List<String> topic){
         this.publisher = publisher;
         this.topics = topic;
     }
 
+    /**
+     * Override UpdateListener, when event is detected, then call
+     * @param newEvents: New event
+     * @param oldEvents: Old event
+     * @param statement: Statement instance
+     * @param runtime: Runtime instance
+     */
     @Override
     public void update(EventBean[] newEvents, EventBean[] oldEvents, EPStatement statement, EPRuntime runtime){
         long id = (long) newEvents[0].get("ID");

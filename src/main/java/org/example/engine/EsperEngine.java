@@ -18,6 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Esper engine function for Complex Event Processing (CEP)
+ */
 public class EsperEngine {
     private static EsperEngine esperEngine = null;
     private EPCompiler epCompiler = null;
@@ -27,6 +30,11 @@ public class EsperEngine {
     private Map<String, List<UpdateListener>> statementListener = new HashMap<String, List<UpdateListener>>();
 
     private EsperEngine() {}
+
+    /**
+     * Singleton Pattern, get esper engine instance
+     * @return Esper engine instance
+     */
     public static EsperEngine getInstance(){
         if(esperEngine == null){
             synchronized(EsperEngine.class) {
@@ -38,10 +46,21 @@ public class EsperEngine {
         return esperEngine;
     }
 
+    /**
+     * Create the esper compiler for compiling EPL module
+     */
     public void createCompiler(){
         epCompiler = EPCompilerProvider.getCompiler();
     }
 
+    /**
+     * Compile EPL module
+     * @param filepath: The path of EPL file
+     * @param configuration: Configuration instance
+     * @throws EPCompileException: Error for esper compilation
+     * @throws IOException: Error for IO
+     * @throws ParseException: Error for parsing EPL module
+     */
     public void compile (File filepath, Configuration configuration) throws EPCompileException, IOException,
             ParseException {
         CompilerArguments compilerArguments = new CompilerArguments(configuration);
@@ -49,6 +68,14 @@ public class EsperEngine {
         epCompiled = epCompiler.compile(module, compilerArguments);
     }
 
+    /**
+     * Compile EPL module
+     * @param url: The URL of EPL file
+     * @param configuration: Configuration instance
+     * @throws EPCompileException: Error for esper compilation
+     * @throws IOException: Error for IO
+     * @throws ParseException: Error for parsing EPL module
+     */
     public void compile (URL url, Configuration configuration) throws IOException, ParseException,
             EPCompileException{
         CompilerArguments compilerArguments = new CompilerArguments(configuration);
@@ -56,20 +83,37 @@ public class EsperEngine {
         epCompiled = epCompiler.compile(module, compilerArguments);
     }
 
+    /**
+     * Create runtime instance
+     * @param configuration: Configuration instance
+     */
     public void createRuntime(Configuration configuration){
         epRuntime = EPRuntimeProvider.getDefaultRuntime(configuration);
     }
 
+    /**
+     * Deploy the compiled EPL
+     * @throws EPDeployException: Error for deploying
+     */
     public void deploy() throws EPDeployException {
         if(epRuntime != null && epCompiled != null){
             epDeployment = epRuntime.getDeploymentService().deploy(epCompiled);
         }
     }
 
+    /**
+     * Set the EPL statement
+     * @param statement: Statement name
+     * @param updateListeners: list of listeners for a statement
+     */
     public void setStatement(String statement, List<UpdateListener> updateListeners){
         statementListener.put(statement, updateListeners);
     }
 
+    /**
+     * Set listeners for a statement
+     * @throws NoListenersException: Error that no listener is set
+     */
     public void setListener() throws NoListenersException{
         if(!statementListener.isEmpty()) {
             for (Map.Entry entry : statementListener.entrySet()) {
@@ -85,6 +129,11 @@ public class EsperEngine {
         }
     }
 
+    /**
+     * Send event with JSON format to esper engine
+     * @param json: The message by JSON format
+     * @param eventType: Event name/type
+     */
     public void sendEventJson(String json, String eventType){
         epRuntime.getEventService().sendEventJson(json, eventType);
     }

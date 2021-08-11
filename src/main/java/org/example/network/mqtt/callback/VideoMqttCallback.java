@@ -12,21 +12,31 @@ import org.opencv.core.Rect;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.objdetect.CascadeClassifier;
 
-import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 
+/**
+ * Video callback in MQTT
+ */
 public class VideoMqttCallback implements MqttCallback {
     private Subscriber subscriber = null;
     private Base64.Decoder decoder = Base64.getDecoder();
     private CascadeClassifier carCascade = new CascadeClassifier();
 
+    /**
+     * Constructor
+     * @param subscriber: The subscriber instance
+     * @param carCascadeFile: The car classifier model
+     */
     public VideoMqttCallback(Subscriber subscriber, String carCascadeFile){
         this.subscriber = subscriber;
         cascadeLoad(carCascadeFile);
     }
 
-    /* Load the classifier model file */
+    /**
+     * Load car classifier model
+     * @param file: The classifier model file
+     */
     private void cascadeLoad(String file){
         if (!carCascade.load(file)) {
             System.err.println("--(!)Error loading car cascade: " + file);
@@ -36,7 +46,12 @@ public class VideoMqttCallback implements MqttCallback {
         }
     }
 
-    /* detect the number of car in a frame */
+    /**
+     * Detect the car per frame
+     * @param frame: Video frame
+     * @param carCascade: Classifier model
+     * @return number of cars per frame
+     */
     private int detectCar(Mat frame, CascadeClassifier carCascade){
         MatOfRect cars = new MatOfRect();
         // detect the car
@@ -47,13 +62,20 @@ public class VideoMqttCallback implements MqttCallback {
         return listOfcars.size();
     }
 
-    /* Called when connection is lost */
+    /**
+     * (Callback) When connection is lost, then call
+     * @param throwable: Connection lost exception
+     */
     public void connectionLost(Throwable throwable) {
         throwable.printStackTrace();
         System.out.println("Connection to MQTT broker lost!");
     }
 
-    /* Called when message is arrived */
+    /**
+     * (Callback) When the message is arrived, then call
+     * @param topic: The message maps to which topic
+     * @param mqttMessage: The mqtt message
+     */
     public void messageArrived(String topic, MqttMessage mqttMessage) {
         byte[] img = decoder.decode(mqttMessage.getPayload());
         Mat frame = Imgcodecs.imdecode(new MatOfByte(img), Imgcodecs.IMREAD_UNCHANGED);
@@ -63,6 +85,10 @@ public class VideoMqttCallback implements MqttCallback {
         subscriber.addQueue(jsonObject);
     }
 
+    /**
+     * (Callback) Deliver completely
+     * @param iMqttDeliveryToken: The delivery token
+     */
     public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
         // not used in this example
     }

@@ -1,7 +1,8 @@
 package org.example.events;
 
-import java.util.Date;
-
+/**
+ * Event definition for EPL module
+ */
 public class HeartAbnormalEvent {
     public long ID;
     public String startTime;

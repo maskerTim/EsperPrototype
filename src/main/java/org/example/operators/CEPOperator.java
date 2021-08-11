@@ -12,12 +12,14 @@ import org.example.engine.exceptions.NoListenersException;
 import org.example.network.mqtt.client.Publisher;
 import org.example.network.mqtt.client.Subscriber;
 import org.example.operators.exceptions.NoTopicsException;
-import org.example.timer.task.SimpleTask;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
+/**
+ * Operator implemented by Complex Event Processing (CEP) technique
+ */
 public class CEPOperator {
     private String name = null; // name of operator
     private List<String> subNetwork = null;
@@ -31,6 +33,13 @@ public class CEPOperator {
     private URL eplResource;
     private Map<String, List<UpdateListener>> statements = new HashMap<>();
 
+    /**
+     * Constructor
+     * @param name: Operator name
+     * @param sub: List of subscribers
+     * @param pub: List of publishers
+     * @param eplResource: Event Processing Language (EPL) file
+     */
     public CEPOperator(String name, List<String> sub, List<String> pub, URL eplResource){
         this.name = name;
         this.subNetwork = sub;
@@ -38,30 +47,60 @@ public class CEPOperator {
         this.eplResource = eplResource;
     }
 
+    /**
+     * Set the EPL file
+     * @param resource: EPL file
+     */
     public void setEplResource(URL resource){
         this.eplResource = resource;
     }
 
+    /**
+     * Set the topics that a subscriber expects
+     * @param subTopics: Topics which would like to subscribe
+     */
     public void setSubTopics(String[] subTopics) {
         this.subTopics = subTopics;
     }
 
+    /**
+     * Set the topics that a publisher expects
+     * @param pubTopics: Topics which would like to publish
+     */
     public void setPubTopics(String[] pubTopics){
         this.pubTopics.addAll(Arrays.asList(pubTopics));
     }
 
+    /**
+     * Set the callback of subscriber in MQTT
+     * (e.g., when you connect successfully, when message has arrived, etc.)
+     * @param mqttCallback: The callback function that you would like.
+     */
     public void setCallback(MqttCallback mqttCallback){
         this.mqttCallback = mqttCallback;
     }
 
+    /**
+     * Set the EPL statement with listeners
+     * @param statementName: Statement name that's set in EPL file
+     * @param updateListeners: List of listeners that run when event is detected
+     */
     public void setStatement(String statementName, List<UpdateListener> updateListeners){
         statements.put(statementName, updateListeners);
     }
 
+    /**
+     * Get operator name
+     * @return operator name
+     */
     public String getName(){
         return name;
     }
 
+    /**
+     * Get subscriber
+     * @return subscriber instance
+     */
     public Subscriber getSubscriber(){
         try{
             if(subscriber != null){
@@ -76,6 +115,10 @@ public class CEPOperator {
         }
     }
 
+    /**
+     * Get publisher
+     * @return publisher instance
+     */
     public Publisher getPublisher(){
         try{
             if(publisher != null){
@@ -90,6 +133,10 @@ public class CEPOperator {
         }
     }
 
+    /**
+     * Get publisher topics
+     * @return list of topics that a publisher expects
+     */
     public List<String> getPubTopics(){
         try{
             if(pubTopics != null){
@@ -104,14 +151,29 @@ public class CEPOperator {
         }
     }
 
+    /**
+     * Create a subscriber instance
+     * @throws MqttException: MQTT Exception
+     */
     public void createSubscriber() throws MqttException{
         subscriber = new Subscriber(String.format("tcp://%s:%s", subNetwork.get(0), subNetwork.get(1)));
     }
 
+    /**
+     * Create a publisher instance
+     * @throws MqttException: MQTT Exception
+     */
     public void createPublisher() throws MqttException{
         publisher = new Publisher(String.format("tcp://%s:%s", pubNetwork.get(0), pubNetwork.get(1)));
     }
 
+    /**
+     * Setup the esper configuration
+     * @throws EPCompileException: Esper compiler error
+     * @throws ParseException: Esper compiler fails to parse the EPL
+     * @throws IOException: IO error
+     * @throws EPDeployException: Fail to deploy esper compiled module
+     */
     private void esperSetup() throws EPCompileException, ParseException,
             IOException, EPDeployException {
         Configuration configuration = new Configuration();
@@ -130,6 +192,10 @@ public class CEPOperator {
         }
     }
 
+    /**
+     * Setup the whole operator
+     * @throws NoTopicsException: Error for no topic is set in operator
+     */
     public void setup() throws NoTopicsException {
         if(subTopics.length == 0 || pubTopics.isEmpty()){
             throw new NoTopicsException();
@@ -144,6 +210,12 @@ public class CEPOperator {
         }
     }
 
+    /**
+     * Start running the operator
+     * @param timerTask: Timer thread
+     * @param delay: the delay time that ready to start
+     * @param period: the interval time that operator runs
+     */
     public void startup(TimerTask timerTask, int delay, int period){
         try {
             subscriber.connect();
